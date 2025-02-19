@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slot Machine</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; background: burlywood; }
+        .slot-container { display: flex; justify-content: center; align-items: center; margin-top: 50px; }
+        .slot { 
+            width: 100px; height: 100px; 
+            margin: 10px; border: 5px solid black; 
+            font-size: 24px; display: flex; 
+            justify-content: center; align-items: center; 
+            font-weight: bold; 
+            background: white; 
+            transition: background 0.3s ease-in-out;
+        }
+        button { padding: 10px 20px; margin-top: 20px; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <h1>Color Game ni Chief</h1><br><br>
+    <a href='https://postimg.cc/VrGqfpPk' target='_blank'><img src='https://i.postimg.cc/VrGqfpPk/471708736-594470793332406-8573180362057776660-n.jpg' border='0' alt='471708736-594470793332406-8573180362057776660-n'/></a>
+    <a href='https://postimg.cc/wt9Lhg6B' target='_blank'><img src='https://i.postimg.cc/wt9Lhg6B/473443755-478372495314565-1928751340717081476-n.jpg' border='0' alt='473443755-478372495314565-1928751340717081476-n'/></a>
+    <div class="slot-container">
+        <div class="slot" id="slot1">❓</div>
+        <div class="slot" id="slot2">❓</div>
+        <div class="slot" id="slot3">❓</div>
+    </div>
+    <button onclick="spinSlots()">Spin</button>
+    <p id="result"></p>
+    
+    <script>
+        let colors = ['red', 'white', 'blue', 'pink', 'green', 'yellow'];
+
+        function spinSlots() {
+            let slots = [document.getElementById('slot1'), document.getElementById('slot2'), document.getElementById('slot3')];
+            let results = [];
+            let spins = 10; // Number of spins before stopping
+
+            let interval = setInterval(() => {
+                slots.forEach(slot => {
+                    let color = colors[Math.floor(Math.random() * colors.length)];
+                    slot.style.background = color;
+                    slot.innerText = color;
+                });
+                spins--;
+                if (spins <= 0) {
+                    clearInterval(interval);
+                    slots.forEach((slot, index) => {
+                        let color = colors[Math.floor(Math.random() * colors.length)];
+                        results.push(color);
+                        slot.style.background = color;
+                        slot.innerText = color;
+                    });
+                    document.getElementById('result').innerText = results[0] === results[1] && results[1] === results[2] ? '🎉 Jackpot! You win! 🎉' : 'Try again!';
+                }
+            }, 150); // Speed of the rolling effect
+        }
+    </script>
+</body>
+</html>
