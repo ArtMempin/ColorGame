@@ -34,21 +34,34 @@
     
     <script>
         let colors = ['red', 'white', 'blue', 'pink', 'green', 'yellow'];
-        let allCombinations = [];
+        let weightedCombinations = [];
 
-        // Generate all possible combinations (216 total)
+        // Generate weighted combinations based on probability rules
         for (let i = 0; i < colors.length; i++) {
             for (let j = 0; j < colors.length; j++) {
                 for (let k = 0; k < colors.length; k++) {
-                    allCombinations.push([colors[i], colors[j], colors[k]]);
+                    let combo = [colors[i], colors[j], colors[k]];
+                    
+                    if (i === j && j === k) {
+                        // Triple match (1 in 36 chance)
+                        weightedCombinations.push(combo);
+                    } else if (i === j || j === k || i === k) {
+                        // Double match (1 in 12 chance)
+                        weightedCombinations.push(combo, combo, combo);
+                    } else {
+                        // Mixed colors (most common)
+                        for (let x = 0; x < 30; x++) {
+                            weightedCombinations.push(combo);
+                        }
+                    }
                 }
             }
         }
 
-        // Function to get a truly random combination (1/N probability)
+        // Function to get a weighted random combination
         function getRandomCombination() {
-            let index = Math.floor(Math.random() * allCombinations.length);
-            return allCombinations[index];
+            let index = Math.floor(Math.random() * weightedCombinations.length);
+            return weightedCombinations[index];
         }
 
         function spinSlots() {
@@ -64,7 +77,7 @@
                 spins--;
                 if (spins <= 0) {
                     clearInterval(interval);
-                    let finalResult = getRandomCombination(); // Pick one from all 216 possible outcomes
+                    let finalResult = getRandomCombination(); // Pick one with weighted probability
 
                     slots.forEach((slot, index) => {
                         slot.style.background = finalResult[index];
